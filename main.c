@@ -38,6 +38,8 @@ int main(void)
 
   app_init();
 
+  game (); //játék fő logikáját indítja el
+
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.

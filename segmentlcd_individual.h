@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 void digits_upper(int,int);
-void digits_clear_upper(int,int);
+void digits_clear_upper(int);
 int fruits(int, uint32_t);
 void digits_lower_fruits(int,int,int);
 void changeCurrentMillis(uint32_t);

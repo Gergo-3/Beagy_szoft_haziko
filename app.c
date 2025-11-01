@@ -56,7 +56,7 @@ app_init (void)
 
       };
 
- game (); //játék fő logikáját indítja el
+
 
 }
 
@@ -65,17 +65,16 @@ app_init (void)
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void game ()
 {
-  uint32_t diff = difficulty (); //nehézségi szint beállítása
+  uint32_t game_difficulty = difficulty (); //nehézségi szint beállítása
   game_start();
   sl_udelay_wait (1000000); //1 másodperc várakozás
  while (i != -1)
     {
       changeCurrentMillis (msTicks);
-      i = fruits (diff, msTicks); //gyümölcsök esése ha eléri a 25-t visszaad egy -1-t, hogy kilépjünk a ciklusból
+      i = fruits (game_difficulty, msTicks); //gyümölcsök esése ha eléri a 25-t visszaad egy -1-t, hogy kilépjünk a ciklusból
       basket (); //kosár mozgatás
     }
   basket_clear (); //Az utolsó kosár poziciójának törlése
-  counter_fruit (); //végeredmény kiiratása a felső kijelzőkre
 }
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
