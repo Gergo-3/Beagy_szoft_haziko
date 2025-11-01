@@ -182,7 +182,7 @@ void basket() {
 		com_lower[basket_position_column][5], true); // bekapcsoljuk a következö szegmenst
 		basket_visible = 1;
 	}
-	if (basket_visible == 1) {
+	if (basket_visible == 1 && change) {
 		LCD_SegmentSet(com_lower[basket_position_column][3],
 		com_lower[basket_position_column][5], false); // kikpacsoljuk az előző szegmenst
 		basket_position_column += change;
@@ -242,22 +242,45 @@ int button_push() {
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 uint32_t difficulty() {
-	while (1) {
+		//digits_upper(0, difficulty_i);
+		//if (button_push() == -1) {
+		//	return difficulty_i;
+		//}
+		//sl_udelay_wait(100000);
+		//digits_clear_upper(difficulty_i);
+		//if (difficulty_i >= 3) {
+		//	difficulty_i = 0;
+		//}
+		//difficulty_i++;
 
+		difficulty_i = 1;
 		digits_upper(0, difficulty_i);
-		if (button_push() == -1) {
-			return difficulty_i;
-		}
-		sl_udelay_wait(100000);
-		digits_clear_upper(difficulty_i);
-		if (difficulty_i >= 3) {
-			difficulty_i = 0;
-		}
-		difficulty_i++;
+		int button;
+		int button_previous = 0;
+		while (1) {
+
+			button = button_push();
+			int change = 0;
+			if (button != button_previous)
+			{
+				change = button;
+			}
+			if (change == 1)
+				return difficulty_i;
+			else if (change == -1)
+			{
+				digits_clear_upper(difficulty_i);
+				if (difficulty_i >= 3) {
+				difficulty_i = 0;
+				}
+				difficulty_i++;
+				digits_upper(0, difficulty_i);
+			}
+			button_previous = button;
+		};
 
 	}
 
-}
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // az alsó kijelzőket (fákat) randomizálja
@@ -273,9 +296,6 @@ int random() {
 // Játék elindítása a PB1 gombbal
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void game_start() {
-	while (button_push() != 1) {
-
-	};
 	digits_clear_upper(difficulty_i);
 	counter_fruit();
 }
