@@ -73,7 +73,8 @@ void digits_clear_upper(int moveX) {
 //        sorok -> a kijelző sorszáma 
 //        oszlopok -> kijelző teteje, felső/középső/függőleges elem, alsó/középső/függőleges elem, kijelző alja, szegmensekhez tartozó első illetve második bit
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-const int com_lower[7][6] = { { 1, 3, 5, 7, 13, 14 }, // 1 kijelzo
+const int com_lower[7][6] = {
+		{ 1, 3, 5, 7, 13, 14 }, // 1 kijelzo
 		{ 1, 3, 5, 7, 15, 16 }, // 2 kijelzo
 		{ 1, 3, 5, 7, 17, 18 }, // 3 kijelzo
 		{ 1, 3, 5, 7, 19, 28 }, // 4 kijelzo
@@ -167,40 +168,33 @@ void changeCurrentMillis(uint32_t msTicks) {
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void basket() {
-	int button = button_push(); // aktuális gombállapot (0 = nincs, 1 = PB1 nyomva, -1 = PB0 nyomva)
-	if (button == 1 && previousButton == 0) {
-		button_current = 1;
-		previousButton = 1;
+	int currentbutton = button_push(); // aktuális gombállapot (0 = nincs, 1 = PB1 nyomva, -1 = PB0 nyomva)
+
+	int change = 0;
+
+	if (currentbutton != previousButton)
+	{
+		change = currentbutton;
 	}
-	if (button == -1 && previousButton == 0) {
-		button_current = -1;
-		previousButton = 1;
-	}
+
 	if (basket_visible == 0) {
 		LCD_SegmentSet(com_lower[basket_position_column][3],
-				com_lower[basket_position_column][5], true); // bekapcsoljuk a következö szegmenst
-		if (currentMillis - previousMillis_basket >= interval_showed) {
-			basket_visible = 1;
-			previousMillis_basket = currentMillis;
-		}
+		com_lower[basket_position_column][5], true); // bekapcsoljuk a következö szegmenst
+		basket_visible = 1;
 	}
 	if (basket_visible == 1) {
 		LCD_SegmentSet(com_lower[basket_position_column][3],
-				com_lower[basket_position_column][5], false); // kikpacsoljuk az előző szegmenst
-		if (currentMillis - previousMillis_basket >= interval_off_basket) {
-			basket_visible = 0;
-			if (previousButton == 1) {
-				basket_position_column += button_current;
-				button_current = 0;
-				previousButton = 0;
-			}
-			previousMillis_basket = currentMillis;
-		}
+		com_lower[basket_position_column][5], false); // kikpacsoljuk az előző szegmenst
+		basket_position_column += change;
+		LCD_SegmentSet(com_lower[basket_position_column][3],
+		com_lower[basket_position_column][5], true); // bekapcsoljuk az előző szegmenst
 	}
 	if (basket_position_column < 0) //kosár végértékeit ellenőrizzük, nem engedjük tovább lépni a kijelző szélein
 		basket_position_column = 0;
 	if (basket_position_column > 6)
 		basket_position_column = 6;
+
+	previousButton = currentbutton;
 
 }
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
