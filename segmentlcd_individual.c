@@ -18,13 +18,11 @@ int fruit_number = 0;  // gyümölcsök esésének száma (max 25)
 uint32_t currentMillis = 0; // aktuális milliszekundom érték
 uint32_t previousMillis = 0; // előző miliszekundom érték
 uint32_t interval_showed = 1000; // gyümölcs szegmenseinek a frissitése
-uint32_t interval_off_basket = 1; // kosár szegmensének a frissítése
 bool fruit_active = 0; //gyümölcs be-kikapcsolása
 int fruit_caught = 0; // elkapott gyümölcsök száma
 int basket_position_column = 3; // kosár poziciója (közép a legelső állapot)
 int previousButton = 0;   // előző gomb állapota
 bool basket_visible = 0; // kosár be-kikapcsolása
-uint32_t previousMillis_basket = 0; //kosárnak az előző milliszekundum értéke
 int button_current = 0; // gomb megnyomásáanak az értéke (-1 ha balra lépünk +1 ha jobbra lépünk)
 int difficulty_i = 1; // nehézségi szint alsó határa (maximuma 4)
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -88,7 +86,7 @@ const int com_lower[7][6] = {
 //a többihez az 5-ös oszlopot(bit2-t tároljuk). Illetve leállítjuk a játékot ha elértük a game_max változó értéket, jelen esetben 25 játékot engedünk. 
 //Itt számoljuk még az elkapott gyümölcsöket a kosárral
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-int fruits(int diff, uint32_t msTicks) {
+int fruits(int diff) {
 	if (fruit_position_column_first == 0) {
 		fruit_position_column = random();
 		fruit_position_column_first = 1;
@@ -142,7 +140,7 @@ void digits_lower_fruits(int tree, int diff, int x) {
 
 		}
 	}
-	if (fruit_active == 1) {
+	else if (fruit_active == 1) {
 
 		LCD_SegmentSet(com_lower[tree][fruit_position_row], com_lower[tree][x],
 		false); //kikapcsoljuk
@@ -175,24 +173,25 @@ void basket() {
 	if (currentbutton != previousButton)
 	{
 		change = currentbutton;
+		basket_position_column += change;
 	}
 
-	if (basket_visible == 0) {
+	if (basket_position_column < 0) //kosár végértékeit ellenőrizzük, nem engedjük tovább lépni a kijelző szélein
+		basket_position_column = 0;
+	if (basket_position_column > 6)
+		basket_position_column = 6;
+	if (basket_visible == 0 ) {
 		LCD_SegmentSet(com_lower[basket_position_column][3],
 		com_lower[basket_position_column][5], true); // bekapcsoljuk a következö szegmenst
 		basket_visible = 1;
 	}
 	if (basket_visible == 1 && change) {
 		LCD_SegmentSet(com_lower[basket_position_column][3],
-		com_lower[basket_position_column][5], false); // kikpacsoljuk az előző szegmenst
-		basket_position_column += change;
+		com_lower[basket_position_column - change][5], false); // kikpacsoljuk az előző szegmenst
+
 		LCD_SegmentSet(com_lower[basket_position_column][3],
 		com_lower[basket_position_column][5], true); // bekapcsoljuk az előző szegmenst
 	}
-	if (basket_position_column < 0) //kosár végértékeit ellenőrizzük, nem engedjük tovább lépni a kijelző szélein
-		basket_position_column = 0;
-	if (basket_position_column > 6)
-		basket_position_column = 6;
 
 	previousButton = currentbutton;
 

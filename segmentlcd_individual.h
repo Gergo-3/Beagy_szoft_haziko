@@ -7,10 +7,11 @@
 #include <em_lcd.h>
 #include "em_gpio.h"
 #include <stdint.h>
+#include <stdlib.h>
 
 void digits_upper(int,int);
 void digits_clear_upper(int);
-int fruits(int, uint32_t);
+int fruits(int);
 void digits_lower_fruits(int,int,int);
 void changeCurrentMillis(uint32_t);
 void basket();

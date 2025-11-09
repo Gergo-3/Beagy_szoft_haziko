@@ -71,7 +71,7 @@ void game ()
  while (i != -1)
     {
       changeCurrentMillis (msTicks);
-      i = fruits (game_difficulty, msTicks); //gyümölcsök esése ha eléri a 25-t visszaad egy -1-t, hogy kilépjünk a ciklusból
+      i = fruits (game_difficulty); //gyümölcsök esése ha eléri a 25-t visszaad egy -1-t, hogy kilépjünk a ciklusból
       basket (); //kosár mozgatás
     }
   basket_clear (); //Az utolsó kosár poziciójának törlése
