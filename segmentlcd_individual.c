@@ -240,7 +240,7 @@ int button_push() {
 // Fokozatok 1-3, ahol az 1 a könnyűt jelenti
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-uint32_t difficulty() {
+uint32_t difficulty(volatile uint32_t *msTicks) {
 		//digits_upper(0, difficulty_i);
 		//if (button_push() == -1) {
 		//	return difficulty_i;
@@ -265,7 +265,10 @@ uint32_t difficulty() {
 				change = button;
 			}
 			if (change == 1)
+			{
+				srand((unsigned) *msTicks);
 				return difficulty_i;
+			}
 			else if (change == -1)
 			{
 				digits_clear_upper(difficulty_i);

@@ -65,7 +65,7 @@ app_init (void)
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void game ()
 {
-  uint32_t game_difficulty = difficulty (); //nehézségi szint beállítása
+  uint32_t game_difficulty = difficulty(&msTicks); //nehézségi szint beállítása
   game_start();
   sl_udelay_wait (1000000); //1 másodperc várakozás
  while (i != -1)

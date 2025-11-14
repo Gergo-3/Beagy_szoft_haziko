@@ -18,7 +18,7 @@ void basket();
 void basket_clear();
 void counter_fruit();
 int button_push();
-uint32_t difficulty();
+uint32_t difficulty(volatile uint32_t*);
 int random();
 void game_start();
 
